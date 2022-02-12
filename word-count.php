@@ -55,6 +55,20 @@
                         'default' => 'Post Statistics'
                 ] );
 
+                add_settings_field( 'wcp_wordcount', 'Word count', [ $this, 'wordcountField_html' ], 'wcp-settings-page', 'wcp_settings_section' );
+                register_setting( 'wcp-main-section', 'wcp_wordcount', [
+                        'sanitize_callback' => 'sanitize_text_field',
+                        'default' => '1'
+                ] );
+
+            }
+
+            #
+            function wordcountField_html() {
+                # checked   / Compara los dos primeros argumentos y, si son idénticos, marca como marcado.
+                ?>
+                    <input type="checkbox" name="wcp_wordcount" value="1" <?php checked( get_option( 'wcp_wordcount' ), '1' ); ?> />
+                <?php
             }
 
             #
