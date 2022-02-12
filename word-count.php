@@ -48,22 +48,40 @@
                     ] 
                 );
 
-                # Agrega los demás campos para el formulario para con configuración del plugin (sin comentarios)
+                ### Agrega los demás campos para el formulario para con configuración del plugin (sin comentarios)
+
+                # wcp_headline
                 add_settings_field( 'wcp_headline', 'Headline text', [ $this, 'headlineField_html' ], 'wcp-settings-page', 'wcp_settings_section' );
                 register_setting( 'wcp-main-section', 'wcp_headline', [
                         'sanitize_callback' => 'sanitize_text_field',
                         'default' => 'Post Statistics'
                 ] );
-
+                
+                # wcp_wordcount
                 add_settings_field( 'wcp_wordcount', 'Word count', [ $this, 'wordcountField_html' ], 'wcp-settings-page', 'wcp_settings_section' );
                 register_setting( 'wcp-main-section', 'wcp_wordcount', [
                         'sanitize_callback' => 'sanitize_text_field',
                         'default' => '1'
                 ] );
 
+                # wcp_charactercount
+                add_settings_field( 'wcp_charactercount', 'Character count', [ $this, 'charactercountField_html' ], 'wcp-settings-page', 'wcp_settings_section' );
+                register_setting( 'wcp-main-section', 'wcp_charactercount', [
+                        'sanitize_callback' => 'sanitize_text_field',
+                        'default' => '1'
+                ] );
+
             }
 
-            #
+            # FrontEnd (Admin): Despliega campo 'wcp_charactercount' en página de configuración
+            function charactercountField_html() {
+                # checked   / Compara los dos primeros argumentos y, si son idénticos, marca como marcado.
+                ?>
+                    <input type="checkbox" name="wcp_charactercount" value="1" <?php checked( get_option( 'wcp_charactercount' ), '1' ); ?> />
+                <?php
+            }
+
+            # FrontEnd (Admin): Despliega campo 'wcp_wordcount' en página de configuración
             function wordcountField_html() {
                 # checked   / Compara los dos primeros argumentos y, si son idénticos, marca como marcado.
                 ?>
@@ -71,7 +89,7 @@
                 <?php
             }
 
-            #
+            # FrontEnd (Admin): Despliega campo 'wcp_headline' en página de configuración
             function headlineField_html() {
                 # esc_attr  / Escapando para atributos HTML.
                 ?>
@@ -79,7 +97,7 @@
                 <?php
             }
 
-            # Despliega campo personalizado en página de configuración
+            # FrontEnd (Admin): Despliega campo 'wcp_location' en página de configuración
             function locationField_html() {
                 # get_option    / Recupera un valor de opción basado en un nombre de opción
                 # selected      / Compara los dos primeros argumentos y, si son idénticos, los marca como seleccionados.
