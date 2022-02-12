@@ -43,7 +43,7 @@
                     'wcp-main-section',                 # $option_group / ID único como nombre del grupo
                     'wcp_location',                     # $option_name  / ID único como nombre del campo
                     [                                   # $args         / Describe configuracion para los datos, asignar valores predeterminados
-                        'sanitize_callback' => 'sanitize_text_field',
+                        'sanitize_callback' => [ $this, 'locationField_sanitize' ],
                         'default' => '0'
                     ] 
                 );
@@ -78,6 +78,26 @@
                         'default' => '1'
                 ] );
 
+            }
+
+            # Verifica que el valor del campo sea permitido para el registro en la BD
+            function locationField_sanitize( $input ) {
+                # $input    / Valor que se esta tratando de guardar en la base de datos
+                # add_settings_error    / Registra un error de configuración para que se muestre al usuario.
+                
+                # Validamos que este campo solo tiene dos valores validos: '0' o '1'
+                if( $input != '0' && $input != '1' ) {
+                    add_settings_error(
+                        'wcp_location',                                     # $setting  /  Slug de la configuración a la que se aplica este error (nombre del campo)
+                        'wcp_location_error',                               # $code     / Slug-name para identificar el error. Se utiliza como parte del atributo 'id' en la salida HTML.
+                        'Display location must be either beginning or end'  # $message  / mensaje con formato que se mostrará al usuario (se mostrará dentro de las etiquetas con estilo <div> y <p>).
+                        # $type     / Tipo de mensaje, controla la clase HTML. Los valores posibles incluyen  'error', 'success', 'warning', 'info'. Valor por defecto: 'error'
+                    );   
+
+                    return get_option( 'wcp_location' );        # Retorna el valor actual en la base de datos
+                }
+
+                return $input;      # Retorma el valor recibido
             }
 
             # FrontEnd (Admin): Despliega todos los campos de tipo 'checkbox' en página de configuración
