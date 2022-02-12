@@ -16,8 +16,75 @@
                 # Agrega un Callback a un Hook 'admin_menu'
                 add_action( 'admin_menu', [ $this, 'addPluginAccessLinkToSettingsMenu' ] );
                 add_action( 'admin_init', [ $this, 'settings' ] );
+                add_filter( 'the_content', [ $this, 'addContentWrapper' ] );
             }
 
+            # Agrega un envoltorio al contenido si se requiere
+            function addContentWrapper( $content ) {
+                # get_option    / Usa el segundo parametro como valor por defecto en caso de no recuperar un valor de la BD
+
+                # Verifica que las opciones del plugin estén habilitadas para desplegar el contador de palabras
+                if( is_main_query() AND is_single() AND 
+                    ( 
+                        get_option( 'wcp_wordcount', '1' ) OR 
+                        get_option( 'wcp_charactercount', '1' ) OR 
+                        get_option( 'wcp_readtimecount', '1' ) 
+                    )
+                ) {
+                    return $this -> wordCount_html( $content );
+                }
+
+                return $content;
+            }
+
+            # Despliega contador de palabras junto con el contenido de la entrada
+            function wordCount_html( $content ) {
+                $template_html = "<h3>" .esc_html( get_option( 'wcp_headline', 'Post Statistics' ) ). "</h3><p>";
+                
+                # Verifica que las opciones de "conteo de palabras" y "tiempo de lectura" esten activados, para realizar el conteo de las palabras
+                if( get_option( 'wcp_wordcount', '1' ) OR get_option( 'wcp_readtime', '1' ) ) {
+                    # strip_tags    / Retira las etiquetas HTML y PHP de un string
+                    $wordCounter = str_word_count( strip_tags( $content ) );
+                }
+
+                # Verifica que la opcion de contador de palabras este habilitada para agregarla a la vista
+                if( get_option( 'wcp_wordcount', '1' ) ) {
+                    $theWordWord = ( $wordCounter == 1 ) ? 'word' : 'words';
+                    $template_html .= 'This post has ' .$wordCounter. ' ' .$theWordWord. '.<br />'; 
+                }
+
+                # Verifica que la opcion de contador de caracteres este habilitada para agregarla a la vista
+                if( get_option( 'wcp_charactercount', '1' ) ) {
+                    $theWordCharacter = ( strlen( wp_strip_all_tags( $content ) ) == 1 ) ? 'character' : 'characters';
+
+                    # wp_strip_all_tags     / Elimina correctamente todas las etiquetas HTML, incluido el script y el estilo.
+                    $template_html .= 'This post has ' .strlen( wp_strip_all_tags( $content ) ). ' ' .$theWordCharacter. '.<br />'; 
+                }
+
+                # Verifica que la opcion de tiempo estimado este habilitada para agregarla a la vista
+                if( get_option( 'wcp_readtimecount', '1' ) ) {
+                    
+                    # Verifica que la cantidad de caracteres sea > a 0 para que pueda desplegarse el tiempo estimado
+                    if( strlen( wp_strip_all_tags( $content ) ) > 0 ) {
+                        # El adulto promedio lee entre 200 y 225 palabras por minuto
+                        $time = round( $wordCounter / 225 );
+                        
+                        $minute_singular_plural = ( $time < 2 ) ? "minute" : "minutes";
+                        $message = ( $wordCounter > 0 AND $time == 0 ) ? "less than 1 minute " : "about $time $minute_singular_plural"; 
+                                         
+                        $template_html .= 'This post will take ' .$message. ' to read.<br />';     
+                    }
+                
+                }
+
+                if( get_option( 'wcp_location', '0' ) == '0' ) {
+                    return $template_html .$content;
+                } 
+
+                return $content .$template_html;
+            }
+
+            # Configuracion de los campos del formulario de la pagina de configuración del plugin
             function settings() {
 
                 # Agregue nueva sección a página de configuración.
