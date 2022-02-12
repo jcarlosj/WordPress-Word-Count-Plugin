@@ -58,21 +58,21 @@
                 ] );
                 
                 # wcp_wordcount
-                add_settings_field( 'wcp_wordcount', 'Word count', [ $this, 'wordcountField_html' ], 'wcp-settings-page', 'wcp_settings_section' );
+                add_settings_field( 'wcp_wordcount', 'Word count', [ $this, 'checkboxField_html' ], 'wcp-settings-page', 'wcp_settings_section', [ 'name_field' => 'wcp_wordcount' ] );
                 register_setting( 'wcp-main-section', 'wcp_wordcount', [
                         'sanitize_callback' => 'sanitize_text_field',
                         'default' => '1'
                 ] );
 
                 # wcp_charactercount
-                add_settings_field( 'wcp_charactercount', 'Character count', [ $this, 'charactercountField_html' ], 'wcp-settings-page', 'wcp_settings_section' );
+                add_settings_field( 'wcp_charactercount', 'Character count', [ $this, 'checkboxField_html' ], 'wcp-settings-page', 'wcp_settings_section', [ 'name_field' => 'wcp_charactercount' ] );
                 register_setting( 'wcp-main-section', 'wcp_charactercount', [
                         'sanitize_callback' => 'sanitize_text_field',
                         'default' => '1'
                 ] );
 
                 # wcp_readtime
-                add_settings_field( 'wcp_readtime', 'Read time', [ $this, 'readtimeField_html' ], 'wcp-settings-page', 'wcp_settings_section' );
+                add_settings_field( 'wcp_readtime', 'Read time', [ $this, 'checkboxField_html' ], 'wcp-settings-page', 'wcp_settings_section', [ 'name_field' => 'wcp_readtime' ] );
                 register_setting( 'wcp-main-section', 'wcp_readtime', [
                         'sanitize_callback' => 'sanitize_text_field',
                         'default' => '1'
@@ -80,27 +80,16 @@
 
             }
 
-            # FrontEnd (Admin): Despliega campo 'wcp_readtime' en página de configuración
-            function readtimeField_html() {
+            # FrontEnd (Admin): Despliega todos los campos de tipo 'checkbox' en página de configuración
+            function checkboxField_html( $args ) {
                 # checked   / Compara los dos primeros argumentos y, si son idénticos, marca como marcado.
                 ?>
-                    <input type="checkbox" name="wcp_readtime" value="1" <?php checked( get_option( 'wcp_readtime' ), '1' ); ?> />
-                <?php
-            }
-
-            # FrontEnd (Admin): Despliega campo 'wcp_charactercount' en página de configuración
-            function charactercountField_html() {
-                # checked   / Compara los dos primeros argumentos y, si son idénticos, marca como marcado.
-                ?>
-                    <input type="checkbox" name="wcp_charactercount" value="1" <?php checked( get_option( 'wcp_charactercount' ), '1' ); ?> />
-                <?php
-            }
-
-            # FrontEnd (Admin): Despliega campo 'wcp_wordcount' en página de configuración
-            function wordcountField_html() {
-                # checked   / Compara los dos primeros argumentos y, si son idénticos, marca como marcado.
-                ?>
-                    <input type="checkbox" name="wcp_wordcount" value="1" <?php checked( get_option( 'wcp_wordcount' ), '1' ); ?> />
+                    <input 
+                        type="checkbox"
+                        name="<?php echo $args[ 'name_field' ]; ?>" 
+                        value="1" 
+                        <?php checked( get_option( $args[ 'name_field' ] ), '1' ); ?> 
+                    />
                 <?php
             }
 
