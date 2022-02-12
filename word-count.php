@@ -71,6 +71,21 @@
                         'default' => '1'
                 ] );
 
+                # wcp_readtime
+                add_settings_field( 'wcp_readtime', 'Read time', [ $this, 'readtimeField_html' ], 'wcp-settings-page', 'wcp_settings_section' );
+                register_setting( 'wcp-main-section', 'wcp_readtime', [
+                        'sanitize_callback' => 'sanitize_text_field',
+                        'default' => '1'
+                ] );
+
+            }
+
+            # FrontEnd (Admin): Despliega campo 'wcp_readtime' en página de configuración
+            function readtimeField_html() {
+                # checked   / Compara los dos primeros argumentos y, si son idénticos, marca como marcado.
+                ?>
+                    <input type="checkbox" name="wcp_readtime" value="1" <?php checked( get_option( 'wcp_readtime' ), '1' ); ?> />
+                <?php
             }
 
             # FrontEnd (Admin): Despliega campo 'wcp_charactercount' en página de configuración
