@@ -40,13 +40,29 @@
 
                 # Agrega nuevo campo asociandolo un grupo y registrar datos en la tabla wp_options
                 register_setting(
-                    'wcp-main-section',                  # $option_group / ID único como nombre del grupo
+                    'wcp-main-section',                 # $option_group / ID único como nombre del grupo
                     'wcp_location',                     # $option_name  / ID único como nombre del campo
                     [                                   # $args         / Describe configuracion para los datos, asignar valores predeterminados
                         'sanitize_callback' => 'sanitize_text_field',
                         'default' => '0'
                     ] 
                 );
+
+                # Agrega los demás campos para el formulario para con configuración del plugin (sin comentarios)
+                add_settings_field( 'wcp_headline', 'Headline text', [ $this, 'headlineField_html' ], 'wcp-settings-page', 'wcp_settings_section' );
+                register_setting( 'wcp-main-section', 'wcp_headline', [
+                        'sanitize_callback' => 'sanitize_text_field',
+                        'default' => 'Post Statistics'
+                ] );
+
+            }
+
+            #
+            function headlineField_html() {
+                # esc_attr  / Escapando para atributos HTML.
+                ?>
+                    <input type="text" name="wcp_headline" value="<?php echo esc_attr( get_option( 'wcp_headline' ) ); ?>" />
+                <?php
             }
 
             # Despliega campo personalizado en página de configuración
