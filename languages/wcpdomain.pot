@@ -1,0 +1,111 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Word Count\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-02-14 21:16+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.8; wp-5.9\n"
+"X-Domain: wcpdomain"
+
+#: word-count.php:219
+msgid "Beginning of post"
+msgstr ""
+
+#: word-count.php:77
+msgid "character"
+msgstr ""
+
+#: word-count.php:156
+msgid "Character count"
+msgstr ""
+
+#: word-count.php:77
+msgid "characters"
+msgstr ""
+
+#: word-count.php:60
+msgctxt "DB: table _options"
+msgid "Post Statistics"
+msgstr ""
+
+#. # $id           / ID único como nombre del campo
+#: word-count.php:122
+msgid "Display location"
+msgstr ""
+
+#: word-count.php:222
+msgid "End of post"
+msgstr ""
+
+#: word-count.php:142
+msgid "Headline text"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://github.com/jcarlosj"
+msgstr ""
+
+#. Author of the plugin
+msgid "Juan Carlos Jiménez Gutiérrez"
+msgstr ""
+
+#: word-count.php:93
+msgctxt "less than 255 words"
+msgid "less than 1 minute"
+msgstr ""
+
+#: word-count.php:93
+msgctxt "more than 255 words"
+msgid "about"
+msgstr ""
+
+#: word-count.php:92
+msgctxt "plural"
+msgid "minutes"
+msgstr ""
+
+#: word-count.php:163
+msgid "Read time"
+msgstr ""
+
+#: word-count.php:92
+msgctxt "singular"
+msgid "minute"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"This plugin analyzes the content to determine: number of words, number of "
+"characters and estimated reading time of a post."
+msgstr ""
+
+#: word-count.php:72 word-count.php:80
+msgid "This post has"
+msgstr ""
+
+#: word-count.php:71
+msgid "word"
+msgstr ""
+
+#. # $page_title   / Título de la página que se despliega en la pestaña del navegador
+#. Name of the plugin
+#: word-count.php:234
+msgid "Word Count"
+msgstr ""
+
+#: word-count.php:245
+msgid "Word Count Settings"
+msgstr ""
+
+#: word-count.php:71
+msgid "words"
+msgstr ""

@@ -5,6 +5,8 @@
      * Version: 1.0
      * Author: Juan Carlos Jiménez Gutiérrez
      * Author URI: https://github.com/jcarlosj
+     * Text Domain: wcpdomain
+     * Domain Path: /languages
      */
 
     # Valida si la funcion no existe
@@ -17,6 +19,20 @@
                 add_action( 'admin_menu', [ $this, 'addPluginAccessLinkToSettingsMenu' ] );
                 add_action( 'admin_init', [ $this, 'settings' ] );
                 add_filter( 'the_content', [ $this, 'addContentWrapper' ] );
+                add_action( 'init', [ $this, 'languages' ] );
+            }
+
+            # Agrega soporte internacionalización
+            function languages() {
+                # dirname   / Devuelve la ruta de un directorio padre
+                # __FILE__  / Constante mágica de PHP. Ruta completa y nombre del fichero con enlaces simbólicos resueltos.
+                # load_plugin_textdomain    / Carga las cadenas traducidas de un complemento.
+                # plugin_basename   / Obtiene el nombre base de un complemento.
+                load_plugin_textdomain( 
+                    'wcpdomain',                                            # $domain   / ID único para recuperar cadenas traducidas
+                    false,                                                  # $deprecated   / (Optional) Obsoleto. Utilice el parámetro $plugin_rel_path en su lugar. Valor predeterminado: false
+                    dirname( plugin_basename( __FILE__ ) ). '/languages'    # $plugin_rel_path  / (Opcional) Ruta relativa a WP_PLUGIN_DIR donde reside el archivo .mo. Valor predeterminado: false
+                );
             }
 
             # Agrega un envoltorio al contenido si se requiere
@@ -39,8 +55,10 @@
 
             # Despliega contador de palabras junto con el contenido de la entrada
             function wordCount_html( $content ) {
-                $template_html = "<h3>" .esc_html( get_option( 'wcp_headline', 'Post Statistics' ) ). "</h3><p>";
-                
+                # __    / Recupera la traducción de $text.   
+                # Traduce cadena que viene de la tabla xx_options
+                $template_html = "<h3>" .get_option( 'wcp_headline', esc_html_x( 'Post Statistics', 'DB: table _options', 'wcpdomain' ) ). "</h3><p>";
+
                 # Verifica que las opciones de "conteo de palabras" y "tiempo de lectura" esten activados, para realizar el conteo de las palabras
                 if( get_option( 'wcp_wordcount', '1' ) OR get_option( 'wcp_readtime', '1' ) ) {
                     # strip_tags    / Retira las etiquetas HTML y PHP de un string
@@ -49,16 +67,17 @@
 
                 # Verifica que la opcion de contador de palabras este habilitada para agregarla a la vista
                 if( get_option( 'wcp_wordcount', '1' ) ) {
-                    $theWordWord = ( $wordCounter == 1 ) ? 'word' : 'words';
-                    $template_html .= 'This post has ' .$wordCounter. ' ' .$theWordWord. '.<br />'; 
+                    # esc_html  / Escapa bloques HTML
+                    $theWordWord = ( $wordCounter == 1 ) ? __( 'word', 'wcpdomain' ) : __( 'words', 'wcpdomain' );
+                    $template_html .= esc_html__( 'This post has', 'wcpdomain' ). ' ' .$wordCounter. ' ' .$theWordWord. '.<br />'; 
                 }
 
                 # Verifica que la opcion de contador de caracteres este habilitada para agregarla a la vista
                 if( get_option( 'wcp_charactercount', '1' ) ) {
-                    $theWordCharacter = ( strlen( wp_strip_all_tags( $content ) ) == 1 ) ? 'character' : 'characters';
+                    $theWordCharacter = ( strlen( wp_strip_all_tags( $content ) ) == 1 ) ? __( 'character', 'wcpdomain' ) : __( 'characters', 'wcpdomain' );
 
                     # wp_strip_all_tags     / Elimina correctamente todas las etiquetas HTML, incluido el script y el estilo.
-                    $template_html .= 'This post has ' .strlen( wp_strip_all_tags( $content ) ). ' ' .$theWordCharacter. '.<br />'; 
+                    $template_html .= esc_html__( 'This post has', 'wcpdomain' ). ' ' .strlen( wp_strip_all_tags( $content ) ). ' ' .$theWordCharacter. '.<br />'; 
                 }
 
                 # Verifica que la opcion de tiempo estimado este habilitada para agregarla a la vista
@@ -68,11 +87,12 @@
                     if( strlen( wp_strip_all_tags( $content ) ) > 0 ) {
                         # El adulto promedio lee entre 200 y 225 palabras por minuto
                         $time = round( $wordCounter / 225 );
-                        
-                        $minute_singular_plural = ( $time < 2 ) ? "minute" : "minutes";
-                        $message = ( $wordCounter > 0 AND $time == 0 ) ? "less than 1 minute " : "about $time $minute_singular_plural"; 
+
+                        # esc_html_x    / Traduce la cadena con el contexto gettext y la escapa para un uso seguro en la salida HTML
+                        $minute_singular_plural = ( $time < 2 ) ? esc_html_x( 'minute', 'singular', 'wcpdomain' ) : esc_html_x( 'minutes', 'plural', 'wcpdomain' );
+                        $message = ( $wordCounter > 0 AND $time == 0 ) ?  esc_html_x( 'less than 1 minute', 'less than 255 words', 'wcpdomain' ) : esc_html_x( 'about', 'more than 255 words', 'wcpdomain' ). ' ' .$time. ' ' .$minute_singular_plural; 
                                          
-                        $template_html .= 'This post will take ' .$message. ' to read.<br />';     
+                        $template_html .= esc_html__( 'This post will take', 'wcpdomain' ). ' ' .$message. ' ' .esc_html__( 'to read', 'wcpdomain' ). '<br />';     
                     }
                 
                 }
@@ -96,9 +116,10 @@
                 );
 
                 # Agrega nuevo campo a una sección de página de configuración.
+                # esc_html_e    / Muestre el texto traducido que se ha escapado para un uso seguro en la salida HTML.
                 add_settings_field(
                     'wcp_location',                     # $id           / ID único como nombre del campo
-                    'Display location',                 # $title        / Label para el campo
+                    esc_html__( 'Display location', 'wcpdomain' ),                 # $title        / Label para el campo
                     [ $this, 'locationField_html' ],    # $callback     / Callback a ejecutar
                     'wcp-settings-page',                # $page         / Nombre de la página a la que se asociará el campo
                     'wcp_settings_section'              # $section      / Nombre de la sección a la que se asociará el campo
@@ -118,28 +139,28 @@
                 ### Agrega los demás campos para el formulario para con configuración del plugin (sin comentarios)
 
                 # wcp_headline
-                add_settings_field( 'wcp_headline', 'Headline text', [ $this, 'headlineField_html' ], 'wcp-settings-page', 'wcp_settings_section' );
+                add_settings_field( 'wcp_headline', esc_html__( 'Headline text', 'wcpdomain' ) , [ $this, 'headlineField_html' ], 'wcp-settings-page', 'wcp_settings_section' );
                 register_setting( 'wcp-main-section', 'wcp_headline', [
                         'sanitize_callback' => 'sanitize_text_field',
                         'default' => 'Post Statistics'
                 ] );
                 
                 # wcp_wordcount
-                add_settings_field( 'wcp_wordcount', 'Word count', [ $this, 'checkboxField_html' ], 'wcp-settings-page', 'wcp_settings_section', [ 'name_field' => 'wcp_wordcount' ] );
+                add_settings_field( 'wcp_wordcount', esc_html_x( 'Word count', 'checkbox label', 'wpcdomain' ), [ $this, 'checkboxField_html' ], 'wcp-settings-page', 'wcp_settings_section', [ 'name_field' => 'wcp_wordcount' ] );
                 register_setting( 'wcp-main-section', 'wcp_wordcount', [
                         'sanitize_callback' => 'sanitize_text_field',
                         'default' => '1'
                 ] );
 
                 # wcp_charactercount
-                add_settings_field( 'wcp_charactercount', 'Character count', [ $this, 'checkboxField_html' ], 'wcp-settings-page', 'wcp_settings_section', [ 'name_field' => 'wcp_charactercount' ] );
+                add_settings_field( 'wcp_charactercount', esc_html__( 'Character count', 'wcpdomain' ), [ $this, 'checkboxField_html' ], 'wcp-settings-page', 'wcp_settings_section', [ 'name_field' => 'wcp_charactercount' ] );
                 register_setting( 'wcp-main-section', 'wcp_charactercount', [
                         'sanitize_callback' => 'sanitize_text_field',
                         'default' => '1'
                 ] );
 
                 # wcp_readtime
-                add_settings_field( 'wcp_readtime', 'Read time', [ $this, 'checkboxField_html' ], 'wcp-settings-page', 'wcp_settings_section', [ 'name_field' => 'wcp_readtime' ] );
+                add_settings_field( 'wcp_readtime', esc_html__( 'Read time', 'wcpdomain' ), [ $this, 'checkboxField_html' ], 'wcp-settings-page', 'wcp_settings_section', [ 'name_field' => 'wcp_readtime' ] );
                 register_setting( 'wcp-main-section', 'wcp_readtime', [
                         'sanitize_callback' => 'sanitize_text_field',
                         'default' => '1'
@@ -184,7 +205,7 @@
             function headlineField_html() {
                 # esc_attr  / Escapando para atributos HTML.
                 ?>
-                    <input type="text" name="wcp_headline" value="<?php echo esc_attr( get_option( 'wcp_headline' ) ); ?>" />
+                    <input type="text" name="wcp_headline" value="<?php echo esc_attr( get_option( 'wcp_headline' ), 'wcpdomain' ); ?>" />
                 <?php
             }
 
@@ -194,8 +215,12 @@
                 # selected      / Compara los dos primeros argumentos y, si son idénticos, los marca como seleccionados.
                 ?>
                     <select name="wcp_location">
-                        <option value="0" <?php selected( get_option( 'wcp_location' ), '0' ); ?>>Beginning of post</option>
-                        <option value="1" <?php selected( get_option( 'wcp_location' ), '1' ); ?>>End of post</option>
+                        <option value="0" <?php selected( get_option( 'wcp_location' ), '0' ); ?>>
+                            <?php _e( 'Beginning of post', 'wcpdomain' ); ?>
+                        </option>
+                        <option value="1" <?php selected( get_option( 'wcp_location' ), '1' ); ?>>
+                            <?php _e( 'End of post', 'wcpdomain' ); ?>
+                        </option>
                     </select>
                 <?php
             }
@@ -205,8 +230,8 @@
 
                 # Agrega enlace al submenú del menu de Configuración y vincula con un FrontEnd en el ADMIN.
                 add_options_page(
-                    'Word Count Settings',          # $page_title   / Título de la página que se despliega en la pestaña del navegador
-                    'Word Count',                   # $menu_title   / Nombre del item de menú que se desplegará en el FrontEnd (Admin)
+                    esc_html__( 'Word Count Settings', 'wcpdomain' ),          # $page_title   / Título de la página que se despliega en la pestaña del navegador
+                    esc_html_x( 'Word count', 'menu text', 'wpcdomain' ),                   # $menu_title   / Nombre del item de menú que se desplegará en el FrontEnd (Admin)
                     'manage_options',               # $capability   / Permiso que permite ver, editar y guardar opciones para el sitio web (Admin)
                     'wcp-settings-page',            # $menu_slug    / Nombre del Slug de página (URL: Admin)
                     [ $this, 'settingsPage_html' ]  # $function     / Callback a ejecutar
@@ -217,7 +242,7 @@
             function settingsPage_html() {
                 ?>
                     <div class="wrap">
-                        <h1>Word Count Settings</h1>
+                        <h1><?php esc_html_e( 'Word Count Settings', 'wcpdomain' ); ?></h1>
                         <form action="options.php" method="POST">
                             <?php
                                 settings_fields( 'wcp-main-section' );               # WP agrega campos de salida nonce, action y option_page para una página de configuración (permite además salvar los cambios del campo)
