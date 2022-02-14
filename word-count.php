@@ -90,9 +90,10 @@
 
                         # esc_html_x    / Traduce la cadena con el contexto gettext y la escapa para un uso seguro en la salida HTML
                         $minute_singular_plural = ( $time < 2 ) ? esc_html_x( 'minute', 'singular', 'wcpdomain' ) : esc_html_x( 'minutes', 'plural', 'wcpdomain' );
-                        $message = ( $wordCounter > 0 AND $time == 0 ) ?  esc_html_x( 'less than 1 minute', 'less than 255 words', 'wcpdomain' ) : esc_html_x( 'about', 'more than 255 words', 'wcpdomain' ). ' ' .$time. ' ' .$minute_singular_plural; 
+                        $message = ( $wordCounter > 0 AND $time == 0 ) ? esc_html_x( 'less than 1 minute', 'less than 255 words', 'wcpdomain' ) : esc_html_x( 'about', 'more than 255 words', 'wcpdomain' ). ' ' .$time. ' ' .$minute_singular_plural; 
                                          
-                        $template_html .= esc_html__( 'This post will take', 'wcpdomain' ). ' ' .$message. ' ' .esc_html__( 'to read', 'wcpdomain' ). '<br />';     
+                        # TODO: Hacer que reconozca las cadenas de traduccion
+                        $template_html .= esc_html__( 'This post will take', 'wcpdomain' ). ' ' .$message. ' ' .esc_html__( 'to read', 'wcpdomain' ). '</p>';     
                     }
                 
                 }
@@ -146,7 +147,7 @@
                 ] );
                 
                 # wcp_wordcount
-                add_settings_field( 'wcp_wordcount', esc_html_x( 'Word count', 'checkbox label', 'wpcdomain' ), [ $this, 'checkboxField_html' ], 'wcp-settings-page', 'wcp_settings_section', [ 'name_field' => 'wcp_wordcount' ] );
+                add_settings_field( 'wcp_wordcount', esc_html__( 'Word Count', 'wcpdomain' ), [ $this, 'checkboxField_html' ], 'wcp-settings-page', 'wcp_settings_section', [ 'name_field' => 'wcp_wordcount' ] );
                 register_setting( 'wcp-main-section', 'wcp_wordcount', [
                         'sanitize_callback' => 'sanitize_text_field',
                         'default' => '1'
@@ -231,7 +232,7 @@
                 # Agrega enlace al submenú del menu de Configuración y vincula con un FrontEnd en el ADMIN.
                 add_options_page(
                     esc_html__( 'Word Count Settings', 'wcpdomain' ),          # $page_title   / Título de la página que se despliega en la pestaña del navegador
-                    esc_html_x( 'Word count', 'menu text', 'wpcdomain' ),                   # $menu_title   / Nombre del item de menú que se desplegará en el FrontEnd (Admin)
+                    esc_html__( 'Word Count', 'wcpdomain' ),      # $menu_title   / Nombre del item de menú que se desplegará en el FrontEnd (Admin)
                     'manage_options',               # $capability   / Permiso que permite ver, editar y guardar opciones para el sitio web (Admin)
                     'wcp-settings-page',            # $menu_slug    / Nombre del Slug de página (URL: Admin)
                     [ $this, 'settingsPage_html' ]  # $function     / Callback a ejecutar
