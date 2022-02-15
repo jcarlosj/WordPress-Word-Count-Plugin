@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Word Count\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-14 21:16+0000\n"
-"PO-Revision-Date: 2022-02-14 21:21+0000\n"
+"POT-Creation-Date: 2022-02-15 21:09+0000\n"
+"PO-Revision-Date: 2022-02-15 21:19+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español de Colombia\n"
 "Language: es_CO\n"
@@ -15,37 +15,29 @@ msgstr ""
 "X-Loco-Version: 2.5.8; wp-5.9\n"
 "X-Domain: wcpdomain"
 
-#: word-count.php:219
+#: word-count.php:258
 msgid "Beginning of post"
-msgstr "Al inicio de la publicación"
+msgstr "Al inicio de la entrada"
 
-#: word-count.php:77
-msgid "character"
-msgstr "caracter"
-
-#: word-count.php:156
+#: word-count.php:195
 msgid "Character count"
 msgstr "Contador de caracteres"
 
-#: word-count.php:77
-msgid "characters"
-msgstr "caracteres"
-
-#: word-count.php:60
+#: word-count.php:76
 msgctxt "DB: table _options"
 msgid "Post Statistics"
-msgstr "Estadísticas de la publicación"
+msgstr "Estadísticas de la entrada"
 
 #. # $id           / ID único como nombre del campo
-#: word-count.php:122
+#: word-count.php:161
 msgid "Display location"
 msgstr "Ubicación"
 
-#: word-count.php:222
+#: word-count.php:261
 msgid "End of post"
-msgstr "Al final de la publicación"
+msgstr "Al final de la entrada"
 
-#: word-count.php:142
+#: word-count.php:181
 msgid "Headline text"
 msgstr "Texto del titular"
 
@@ -57,29 +49,9 @@ msgstr "https://github.com/jcarlosj"
 msgid "Juan Carlos Jiménez Gutiérrez"
 msgstr "Juan Carlos Jiménez Gutiérrez"
 
-#: word-count.php:93
-msgctxt "less than 255 words"
-msgid "less than 1 minute"
-msgstr "menos de 1 minuto"
-
-#: word-count.php:93
-msgctxt "more than 255 words"
-msgid "about"
-msgstr "aproximadamente"
-
-#: word-count.php:92
-msgctxt "plural"
-msgid "minutes"
-msgstr "minutos"
-
-#: word-count.php:163
+#: word-count.php:202
 msgid "Read time"
 msgstr "Tiempo de lectura"
-
-#: word-count.php:92
-msgctxt "singular"
-msgid "minute"
-msgstr "minuto"
 
 #. Description of the plugin
 msgid ""
@@ -87,26 +59,30 @@ msgid ""
 "characters and estimated reading time of a post."
 msgstr ""
 "Este complemento analiza el contenido para determinar: número de palabras, "
-"número de caracteres y tiempo estimado de lectura de una publicación. "
+"número de caracteres y tiempo estimado de lectura de una publicación."
 
-#: word-count.php:72 word-count.php:80
-msgid "This post has"
-msgstr "Esta publicación tiene"
+#: word-count.php:102
+#, php-format
+msgctxt "time measurement"
+msgid "This post has %s character"
+msgid_plural "This post has %s characters"
+msgstr[0] "Esta entrada tiene %s caracter"
+msgstr[1] "Esta entrada tiene %s caracteres"
 
-#: word-count.php:71
-msgid "word"
-msgstr "palabra"
+#: word-count.php:83
+#, php-format
+msgctxt "time measurement"
+msgid "This post has %s word"
+msgid_plural "This post has %s words"
+msgstr[0] "Esta entrada tiene %s palabra"
+msgstr[1] "Esta entrada tiene %s palabras"
 
 #. # $page_title   / Título de la página que se despliega en la pestaña del navegador
 #. Name of the plugin
-#: word-count.php:234
+#: word-count.php:188 word-count.php:273
 msgid "Word Count"
 msgstr "Contador de palabras"
 
-#: word-count.php:245
+#: word-count.php:272 word-count.php:284
 msgid "Word Count Settings"
-msgstr "Configuración del contador de palabras "
-
-#: word-count.php:71
-msgid "words"
-msgstr "palabras"
+msgstr "Configuración del contador de palabras"

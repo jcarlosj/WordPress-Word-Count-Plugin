@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Word Count\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-14 21:16+0000\n"
+"POT-Creation-Date: 2022-02-15 21:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -16,37 +16,29 @@ msgstr ""
 "X-Loco-Version: 2.5.8; wp-5.9\n"
 "X-Domain: wcpdomain"
 
-#: word-count.php:219
+#: word-count.php:258
 msgid "Beginning of post"
 msgstr ""
 
-#: word-count.php:77
-msgid "character"
-msgstr ""
-
-#: word-count.php:156
+#: word-count.php:195
 msgid "Character count"
 msgstr ""
 
-#: word-count.php:77
-msgid "characters"
-msgstr ""
-
-#: word-count.php:60
+#: word-count.php:76
 msgctxt "DB: table _options"
 msgid "Post Statistics"
 msgstr ""
 
 #. # $id           / ID único como nombre del campo
-#: word-count.php:122
+#: word-count.php:161
 msgid "Display location"
 msgstr ""
 
-#: word-count.php:222
+#: word-count.php:261
 msgid "End of post"
 msgstr ""
 
-#: word-count.php:142
+#: word-count.php:181
 msgid "Headline text"
 msgstr ""
 
@@ -58,28 +50,8 @@ msgstr ""
 msgid "Juan Carlos Jiménez Gutiérrez"
 msgstr ""
 
-#: word-count.php:93
-msgctxt "less than 255 words"
-msgid "less than 1 minute"
-msgstr ""
-
-#: word-count.php:93
-msgctxt "more than 255 words"
-msgid "about"
-msgstr ""
-
-#: word-count.php:92
-msgctxt "plural"
-msgid "minutes"
-msgstr ""
-
-#: word-count.php:163
+#: word-count.php:202
 msgid "Read time"
-msgstr ""
-
-#: word-count.php:92
-msgctxt "singular"
-msgid "minute"
 msgstr ""
 
 #. Description of the plugin
@@ -88,24 +60,28 @@ msgid ""
 "characters and estimated reading time of a post."
 msgstr ""
 
-#: word-count.php:72 word-count.php:80
-msgid "This post has"
-msgstr ""
+#: word-count.php:102
+#, php-format
+msgctxt "time measurement"
+msgid "This post has %s character"
+msgid_plural "This post has %s characters"
+msgstr[0] ""
+msgstr[1] ""
 
-#: word-count.php:71
-msgid "word"
-msgstr ""
+#: word-count.php:83
+#, php-format
+msgctxt "time measurement"
+msgid "This post has %s word"
+msgid_plural "This post has %s words"
+msgstr[0] ""
+msgstr[1] ""
 
 #. # $page_title   / Título de la página que se despliega en la pestaña del navegador
 #. Name of the plugin
-#: word-count.php:234
+#: word-count.php:188 word-count.php:273
 msgid "Word Count"
 msgstr ""
 
-#: word-count.php:245
+#: word-count.php:272 word-count.php:284
 msgid "Word Count Settings"
-msgstr ""
-
-#: word-count.php:71
-msgid "words"
 msgstr ""

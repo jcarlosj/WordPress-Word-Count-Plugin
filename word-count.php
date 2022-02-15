@@ -14,12 +14,19 @@
 
         class WordCountAndTime_Plugin {
 
+            private $words_per_minute = 255;
+
             function __construct() {
                 # Agrega un Callback a un Hook 'admin_menu'
                 add_action( 'admin_menu', [ $this, 'addPluginAccessLinkToSettingsMenu' ] );
                 add_action( 'admin_init', [ $this, 'settings' ] );
                 add_filter( 'the_content', [ $this, 'addContentWrapper' ] );
                 add_action( 'init', [ $this, 'languages' ] );
+            }
+
+            function get_reading_time( $wordCounter ) {
+                # El adulto promedio lee entre 200 y 225 palabras por minuto
+                return round( $wordCounter / $this -> words_per_minute );
             }
 
             # Agrega soporte internacionalización
@@ -55,9 +62,6 @@
 
             # Despliega contador de palabras junto con el contenido de la entrada
             function wordCount_html( $content ) {
-                # __    / Recupera la traducción de $text.   
-                # Traduce cadena que viene de la tabla xx_options
-                $template_html = "<h3>" .get_option( 'wcp_headline', esc_html_x( 'Post Statistics', 'DB: table _options', 'wcpdomain' ) ). "</h3><p>";
 
                 # Verifica que las opciones de "conteo de palabras" y "tiempo de lectura" esten activados, para realizar el conteo de las palabras
                 if( get_option( 'wcp_wordcount', '1' ) OR get_option( 'wcp_readtime', '1' ) ) {
@@ -65,19 +69,45 @@
                     $wordCounter = str_word_count( strip_tags( $content ) );
                 }
 
+                $html = '';
+                
+                # __    / Recupera la traducción de $text.   
+                # Traduce cadena que viene de la tabla xx_options
+                $template_html = "<h3>" .get_option( 'wcp_headline', esc_html_x( 'Post Statistics', 'DB: table _options', 'wcpdomain' ) ). "</h3><p>";
+
                 # Verifica que la opcion de contador de palabras este habilitada para agregarla a la vista
                 if( get_option( 'wcp_wordcount', '1' ) ) {
-                    # esc_html  / Escapa bloques HTML
-                    $theWordWord = ( $wordCounter == 1 ) ? __( 'word', 'wcpdomain' ) : __( 'words', 'wcpdomain' );
-                    $template_html .= esc_html__( 'This post has', 'wcpdomain' ). ' ' .$wordCounter. ' ' .$theWordWord. '.<br />'; 
+                    ### PLURALIZATION
+                    # sprintf   / Devuelve un string formateado
+                    $template_html .= sprintf( 
+                        _nx( 
+                            'This post has %s word', 
+                            'This post has %s words', 
+                            $wordCounter, 
+                            'time measurement', 
+                            'wcpdomain' 
+                        ), 
+                        $wordCounter
+                    ) .'<br />';
                 }
 
                 # Verifica que la opcion de contador de caracteres este habilitada para agregarla a la vista
                 if( get_option( 'wcp_charactercount', '1' ) ) {
-                    $theWordCharacter = ( strlen( wp_strip_all_tags( $content ) ) == 1 ) ? __( 'character', 'wcpdomain' ) : __( 'characters', 'wcpdomain' );
-
                     # wp_strip_all_tags     / Elimina correctamente todas las etiquetas HTML, incluido el script y el estilo.
-                    $template_html .= esc_html__( 'This post has', 'wcpdomain' ). ' ' .strlen( wp_strip_all_tags( $content ) ). ' ' .$theWordCharacter. '.<br />'; 
+                    $characterCounter = strlen( wp_strip_all_tags( $content ) );
+
+                    ### PLURALIZATION
+                    # sprintf   / Devuelve un string formateado
+                    $template_html .= sprintf( 
+                        _nx( 
+                            'This post has %s character', 
+                            'This post has %s characters', 
+                            $characterCounter, 
+                            'time measurement', 
+                            'wcpdomain' 
+                        ), 
+                        $characterCounter
+                    ) .'<br />';
                 }
 
                 # Verifica que la opcion de tiempo estimado este habilitada para agregarla a la vista
@@ -85,15 +115,23 @@
                     
                     # Verifica que la cantidad de caracteres sea > a 0 para que pueda desplegarse el tiempo estimado
                     if( strlen( wp_strip_all_tags( $content ) ) > 0 ) {
-                        # El adulto promedio lee entre 200 y 225 palabras por minuto
-                        $time = round( $wordCounter / 225 );
 
-                        # esc_html_x    / Traduce la cadena con el contexto gettext y la escapa para un uso seguro en la salida HTML
-                        $minute_singular_plural = ( $time < 2 ) ? esc_html_x( 'minute', 'singular', 'wcpdomain' ) : esc_html_x( 'minutes', 'plural', 'wcpdomain' );
-                        $message = ( $wordCounter > 0 AND $time == 0 ) ? esc_html_x( 'less than 1 minute', 'less than 255 words', 'wcpdomain' ) : esc_html_x( 'about', 'more than 255 words', 'wcpdomain' ). ' ' .$time. ' ' .$minute_singular_plural; 
-                                         
-                        # TODO: Hacer que reconozca las cadenas de traduccion
-                        $template_html .= esc_html__( 'This post will take', 'wcpdomain' ). ' ' .$message. ' ' .esc_html__( 'to read', 'wcpdomain' ). '</p>';     
+                        $time = $this -> get_reading_time( $wordCounter );
+                        
+                        $nooped_msg = [
+                            'singular' => 'This post will take %s minute to read.',
+                            'context' => null,
+                            'domain' => 'wcpdomain'
+                        ];
+
+                        if( $this -> words_per_minute >= $wordCounter && 0 == $time )
+                            $nooped_msg[ 'plural' ] = 'This post will take less than 1 minute to read.';
+                        else
+                            $nooped_msg[ 'plural' ] = 'This post will take about %s minutes to read.';
+                        
+                        
+                        // Show the message
+	                    $template_html .= sprintf( translate_nooped_plural( $nooped_msg, $time ), $time );
                     }
                 
                 }
