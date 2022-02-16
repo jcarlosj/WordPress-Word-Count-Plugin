@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Word Count\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-15 21:09+0000\n"
+"POT-Creation-Date: 2022-02-16 19:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Loco-Version: 2.5.8; wp-5.9\n"
 "X-Domain: wcpdomain"
 
-#: word-count.php:258
+#: word-count.php:289
 msgid "Beginning of post"
 msgstr ""
 
-#: word-count.php:195
+#: word-count.php:226
 msgid "Character count"
 msgstr ""
 
@@ -30,15 +30,15 @@ msgid "Post Statistics"
 msgstr ""
 
 #. # $id           / ID único como nombre del campo
-#: word-count.php:161
+#: word-count.php:192
 msgid "Display location"
 msgstr ""
 
-#: word-count.php:261
+#: word-count.php:292
 msgid "End of post"
 msgstr ""
 
-#: word-count.php:181
+#: word-count.php:212
 msgid "Headline text"
 msgstr ""
 
@@ -50,9 +50,25 @@ msgstr ""
 msgid "Juan Carlos Jiménez Gutiérrez"
 msgstr ""
 
-#: word-count.php:202
+#: word-count.php:233
 msgid "Read time"
 msgstr ""
+
+#: word-count.php:135
+#, php-format
+msgctxt "read_time_less_than_minute"
+msgid "This post will take %s minute to read."
+msgid_plural "This post will take less than 1 minute to read."
+msgstr[0] ""
+msgstr[1] ""
+
+#: word-count.php:146
+#, php-format
+msgctxt "read_time_more_than_minute"
+msgid "This post will take %s minute to read."
+msgid_plural "This post will take about %s minutes to read."
+msgstr[0] ""
+msgstr[1] ""
 
 #. Description of the plugin
 msgid ""
@@ -78,10 +94,10 @@ msgstr[1] ""
 
 #. # $page_title   / Título de la página que se despliega en la pestaña del navegador
 #. Name of the plugin
-#: word-count.php:188 word-count.php:273
+#: word-count.php:219 word-count.php:304
 msgid "Word Count"
 msgstr ""
 
-#: word-count.php:272 word-count.php:284
+#: word-count.php:303 word-count.php:315
 msgid "Word Count Settings"
 msgstr ""

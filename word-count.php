@@ -79,6 +79,7 @@
                 if( get_option( 'wcp_wordcount', '1' ) ) {
                     ### PLURALIZATION
                     # sprintf   / Devuelve un string formateado
+                    # _nx       / Traduce y recupera la forma singular o plural en función del número proporcionado, con contexto gettext.
                     $template_html .= sprintf( 
                         _nx( 
                             'This post has %s word', 
@@ -117,21 +118,35 @@
                     if( strlen( wp_strip_all_tags( $content ) ) > 0 ) {
 
                         $time = $this -> get_reading_time( $wordCounter );
-                        
-                        $nooped_msg = [
-                            'singular' => 'This post will take %s minute to read.',
-                            'context' => null,
-                            'domain' => 'wcpdomain'
-                        ];
 
-                        if( $this -> words_per_minute >= $wordCounter && 0 == $time )
-                            $nooped_msg[ 'plural' ] = 'This post will take less than 1 minute to read.';
-                        else
-                            $nooped_msg[ 'plural' ] = 'This post will take about %s minutes to read.';
+                        $template_less_than_minute .= sprintf( 
+                            _nx(
+                                'This post will take %s minute to read.',
+                                'This post will take less than 1 minute to read.',
+                                $time,
+                                'read_time_less_than_minute',
+                                'wcpdomain'
+                            ),
+                            $time
+                        ). '<br />';
+                     
+                        $template_more_than_minute .= sprintf( 
+                            _nx(
+                                'This post will take %s minute to read.',
+                                'This post will take about %s minutes to read.',
+                                $time,
+                                'read_time_more_than_minute',
+                                'wcpdomain'
+                            ),
+                            $time
+                        ). '<br />';
                         
-                        
-                        // Show the message
-	                    $template_html .= sprintf( translate_nooped_plural( $nooped_msg, $time ), $time );
+                        if( $this -> less_than_a_minute_to_read_minute( $wordCounter ) ) {
+                            $template_html .= $template_less_than_minute;
+                        }
+                        else {
+                            $template_html .= $template_more_than_minute;
+                        }
                     }
                 
                 }
@@ -141,6 +156,11 @@
                 } 
 
                 return $content .$template_html;
+            }
+
+            # Verifica si toma menos de un minuto leer la publicacion
+            function less_than_a_minute_to_read_minute( $wordCounter ) {
+                return $this -> words_per_minute >= $wordCounter && 0 == $time;
             }
 
             # Configuracion de los campos del formulario de la pagina de configuración del plugin
